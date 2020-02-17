@@ -4,9 +4,9 @@
 ### Installation**
 run the following commands:
 ```
-git clone https://github.com/abellaismail7/1337notifier.git
-cd 1337notifier
-npm install
+$ git clone https://github.com/abellaismail7/1337notifier.git
+$ cd 1337notifier
+$ npm install
 ```
 Psss : the script uses puppeteer library which uses Chromium , this means that this command will download  Chromium(~170MB Mac, ~282MB Linux, ~280MB Win)  
 ### Usage :
@@ -34,7 +34,12 @@ after that create an account on [twilio](https://www.twilio.com/).
 ```
 replace **"<YOUR-PHONE-NUMBER>"**  with your phone number . use +2126.... instead of 06....
 Psss: allow calls to morocco from [Voice Geographic Permissions](https://www.twilio.com/console/voice/calls/geo-permissions/low-risk).
-
+## Run it man!
+run the following command :
+```
+$ npm run start
+``` 
+![Terminal example](./example.png)
 ## Contribute
 1337notifier isn't tested well so I assume that it has many bugs. We need your help.
 
