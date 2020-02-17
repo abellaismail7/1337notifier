@@ -1,0 +1,16 @@
+{
+  "name": "check-in-checker",
+  "version": "1.0.0",
+  "description": "Check for check-in on a headless chrome browser",
+  "main": "index.js",
+  "scripts": {
+    "run": "node ./index.js",
+    "test": "node ./test.js"
+  },
+  "author": "Ismail Bella",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^2.1.1",
+    "twilio": "^3.39.4"
+  }
+}
