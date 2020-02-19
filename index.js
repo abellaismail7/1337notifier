@@ -14,6 +14,8 @@
  */
 const config = require('./config.json');
 const puppeteer = require('puppeteer');
+const notifier = require('node-notifier');
+
 let checksCounter = 0;
 /**
  * oldContent is The content From $("$content-subs").innerText
@@ -75,38 +77,49 @@ async function login() {
 }
 
 async function checkForCheckIn(){
-    console.log(`check for check in ... ${++checksCounter}`)
 
-    /** @type string */
-    const content = await page.evaluate(() => {
-        let element = document.querySelector('#subs-content');
-        return element.innerText;
-    });
-    
-    if(content.startsWith(oldContent) ){
-      /**
-       * nothing new, try after 2 minutes
-       * 
-       * 2Mins = 2 * 60Senconds = 120 * 1000Milis = 120 000Milisconds
-       * 
-       */
-      await new Promise(resolve => setTimeout(resolve, 120000))
-        .then( 
-          ()=> page.reload().then( ()=> checkForCheckIn())
-        );
-
-   }else{ 
-      // Something changed => notify user
-      await notifyMe();
-      // take a screenshot
-      await page.screenshot({
-        path: `./screenshots/index.png`,
-        fullPage: true
-      });
-      //  close browser and end the process
-      await browser.close();
+    while(true){
       
-   }
+      
+      console.log(`check for check in ... ${++checksCounter}`)
+      
+      
+      /** @type string returns content of subs-content element
+       */
+      const content = await page.evaluate(() => {
+          let element = document.querySelector('#subs-content');
+          return element.innerText;
+      });
+      
+
+      
+      if(content.startsWith(oldContent) ){
+        /**
+         * nothing new, try after 2 minutes
+         * 
+         * 2Mins = 2 * 60Senconds = 120 * 1000Milis = 120 000Milisconds
+         * 
+         */
+        await new Promise(resolve => setTimeout(resolve, 320000))
+        try{
+          await page.reload();
+        }catch(err){
+          endProcess(err)
+        }
+
+        }else{
+          // Something changed => notify user
+          await notifyMe();
+          // take a screenshot
+          await page.screenshot({
+            path: `./screenshots/index.png`,
+            fullPage: true
+          });
+          //  close browser and end the process
+          await browser.close();
+          break;
+        }
+    }
 }
 
 const notifyMe = async ()=>{
@@ -120,5 +133,24 @@ const notifyMe = async ()=>{
           from:config.from
         })
         .then(call => console.log(call.sid))
-        .catch(err => console.error(err) );
+        .catch(err => endProcess(err));
+}
+
+
+const endProcess = async (msg)=>{
+    console.error(msg);
+    await page.screenshot({
+      path: `./screenshots/error.png`,
+      fullPage: true
+    });
+    showNotification();
+    await browser.close();
+    process.exit()
+}
+const showNotification = ()=>{
+
+  notifier.notify({
+    title: '1337notifier process is end',
+    message: 'Fix the bug and run it again'
+  });
 }
