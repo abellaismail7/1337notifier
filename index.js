@@ -100,7 +100,7 @@ async function checkForCheckIn(){
          * 2Mins = 2 * 60Senconds = 120 * 1000Milis = 120 000Milisconds
          * 
          */
-        await new Promise(resolve => setTimeout(resolve, 320000))
+        await new Promise(resolve => setTimeout(resolve, 60 * 1000))
         try{
           await page.reload();
         }catch(err){
